@@ -4,6 +4,7 @@ from random import randint
 class Table:
     def __init__(self):
         self.tokens = []
+        self.tokens_aside = []
 
     def create_tokens(self):
         for v1 in range(7):
@@ -12,5 +13,5 @@ class Table:
 
     def shuffle_tokens(self):
         for n in range(len(self.tokens)):
-            r = randint(0, len(self.tokens)-1)
+            r = randint(0, len(self.tokens) - 1)
             self.tokens[n], self.tokens[r] = self.tokens[r], self.tokens[n]
