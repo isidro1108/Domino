@@ -1,10 +1,11 @@
 from token import Token
-from random import randint
+from random import randint, random
 
 class Table:
     def __init__(self):
         self.tokens = []
         self.tokens_aside = []
+        self.message = ''
 
     def create_tokens(self):
         for v1 in range(7):
