@@ -39,18 +39,32 @@ class Game:
         if table.tokens:
             table.tokens_aside, table.tokens = table.tokens, table.tokens_aside
 
+    def draw_table(self):
+        system('cls')
+        tokens_in_table = ''
+        for token in self.table.tokens:
+            tokens_in_table+= '[{}{}]'.format(token.values[0], token.values[1])
+        fill = 6 * ' ' + '|' + 112 * ' ' + '|'
+        fill_for_tokens = (56 - (len(tokens_in_table)//2)) * ' '
+        table = [7 * ' ' + 112 * '_', fill, fill, 
+                6 * ' ' + '|' + fill_for_tokens + tokens_in_table + fill_for_tokens + '|',
+                fill, fill, 7 * ' ' + 112 * chr(175)]
+        for line in table:
+            print(line)
+
 game = Game()
-game.display_welcome()
-game.set_players()
-game.set_game()
-for player in game.players:
-    tokens = ''
-    for token in player.tokens:
-        tokens+= '[{}|{}] '.format(token.values[0], token.values[1])
-    print(player.name, tokens)
-    print()
-tokens_aside = ''
-for token in game.table.tokens_aside:
-    tokens_aside+= '[{}|{}] '.format(token.values[0], token.values[1])
-print('Tokens aside: ' + tokens_aside)
-print(game.table.tokens)
+game.draw_table()
+# game.display_welcome()
+# game.set_players()
+# game.set_game()
+# for player in game.players:
+#     tokens = ''
+#     for token in player.tokens:
+#         tokens+= '[{}|{}] '.format(token.values[0], token.values[1])
+#     print(player.name, tokens)
+#     print()
+# tokens_aside = ''
+# for token in game.table.tokens_aside:
+#     tokens_aside+= '[{}|{}] '.format(token.values[0], token.values[1])
+# print('Tokens aside: ' + tokens_aside)
+# print(game.table.tokens)
