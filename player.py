@@ -24,6 +24,12 @@ class Player:
         my_token = self.tokens[index]
         return token_in_table == my_token.values[0] or token_in_table == my_token.values[1]
 
+    def put_token(self, table, index, direction):
+        if direction == 'right':
+            table.tokens.append(self.tokens.pop(index))
+        elif direction == 'left':
+            table.tokens = [self.tokens.pop(index)] + table.tokens
+
     def play(self, table, index, direction):
         if not table.tokens:
             table.tokens.append(self.tokens.pop(index))
@@ -33,15 +39,9 @@ class Player:
             my_token = self.tokens[index].values[self.directions[direction]]
             if my_token == token_in_table:
                 self.tokens[index].values[0], self.tokens[index].values[1] = self.tokens[index].values[1], self.tokens[index].values[0]
-                if direction == 'right':
-                    table.tokens.append(self.tokens.pop(index))
-                elif direction == 'left':
-                    table.tokens = [self.tokens.pop(index)] + table.tokens
+                self.put_token(table, index, direction)
                 return True
             else:
-                if direction == 'right':
-                    table.tokens.append(self.tokens.pop(index))
-                elif direction == 'left':
-                    table.tokens = [self.tokens.pop(index)] + table.tokens
+                self.put_token(table, index, direction)
                 return True
         return False
