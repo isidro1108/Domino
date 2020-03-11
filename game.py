@@ -87,22 +87,29 @@ table.create_tokens()
 table.shuffle_tokens()
 player1 = Player('yo')
 player1.take_tokens(table)
-table.tokens = []
+table.tokens_aside, table.tokens = table.tokens, table.tokens_aside
 # for n in range(4):
 #     player1.take_tokens(table)
+def start():
+    while True:
+        system('cls')
+        tokens_in_table = ''
+        for token in table.tokens:
+            tokens_in_table+= '[{}|{}]'.format(token.values[0], token.values[1])
+        tokens = ''
+        for token in player1.tokens:
+            tokens+= '[{}|{}] '.format(token.values[0], token.values[1])
+        print('\n' + tokens_in_table + '\n')
+        print(tokens)
+        if table.tokens_aside:
+            if not player1.can_play(table) and player1.tokens:
+                while not player1.can_play(table):
+                    player1.take_token_from_aside(table)
+                return start()
+        if not player1.can_play(table):
+            break
+        index = int(input('\nCon cuál ficha quiere jugar?\n'))
+        direction = input('En qué dirección quieres jugar?\n')
+        player1.play(table, index, direction)
 
-while True:
-    system('cls')
-    tokens_in_table = ''
-    for token in table.tokens:
-        tokens_in_table+= '[{}|{}]'.format(token.values[0], token.values[1])
-    tokens = ''
-    for token in player1.tokens:
-        tokens+= '[{}|{}] '.format(token.values[0], token.values[1])
-    print('\n' + tokens_in_table + '\n')
-    print(tokens)
-    if not player1.can_play(table):
-        break
-    index = int(input('\nCon cuál ficha quiere jugar?\n'))
-    direction = input('En qué dirección quieres jugar?\n')
-    player1.play(table, index, direction)
+start()

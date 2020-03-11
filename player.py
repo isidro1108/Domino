@@ -8,6 +8,9 @@ class Player:
     def take_tokens(self, table):
         for n in range(7):
             self.tokens.append(table.tokens.pop())
+    
+    def take_token_from_aside(self, table):
+        self.tokens.append(table.tokens_aside.pop())
 
     def can_play(self, table):
         if table.tokens:
