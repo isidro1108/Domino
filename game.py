@@ -54,6 +54,17 @@ class Game:
         if table.tokens:
             table.tokens_aside, table.tokens = table.tokens, table.tokens_aside
 
+    def check_inputs(self, player, index, direction):
+        max_index = len(player.tokens)
+        well_index = index >= 0 and index < max_index
+        well_direction = direction == 'r' or direction == 'l'
+        return well_index and well_direction
+
+    def check_number_input(self, index):
+        if len(index) == 1:
+            return ord(index) >= ord('0') and ord(index) <= ord('9')
+        return False
+
     def draw_table(self):
         system('cls')
         tokens_in_table = ''
@@ -100,18 +111,23 @@ class Game:
                 if self.table.tokens_aside:
                     if not player.can_play(self.table) and player.tokens:
                         while not player.can_play(self.table) and self.table.tokens_aside:
-                            self.draw_table()
                             player.take_token_from_aside(self.table)
+                            self.draw_table()
                             sleep(1)
-                        return self.start()
                 if player.can_play(self.table):
                     if not isinstance(player, CPU):
-                        index = int(input('\nCon cuál ficha quiere jugar?\n'))
-                        if self.table.tokens:
-                            direction = input('En qué dirección quieres jugar?\n')
-                        else:
-                            direction = 'r'
-                        player.play(self.table, index, direction)
+                        while True:
+                            self.draw_table()
+                            index = input('\nCon cuál ficha quiere jugar?\n')
+                            if self.table.tokens:
+                                direction = input('En qué dirección quieres jugar?\n')
+                            else:
+                                direction = 'r'
+                            if self.check_number_input(index):
+                                index = int(index)
+                                if self.check_inputs(player, index, direction):
+                                    if player.play(self.table, index, direction):
+                                        break
                     else:
                         player.play(self.table)
                         sleep(1)
