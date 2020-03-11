@@ -3,7 +3,7 @@ class Player:
         self.name = name
         self.points = 0
         self.tokens = []
-        self.dirs = {'left': 0, 'right': -1}
+        self.directions = {'left': 0, 'right': -1}
 
     def take_tokens(self, table):
         for n in range(7):
@@ -19,29 +19,29 @@ class Player:
             return False
         return True
     
-    def can_play_token(self, table, index, dir):
-        token_in_table = table.tokens[self.dirs[dir]].values[self.dirs[dir] * -1]
+    def can_play_token(self, table, index, direction):
+        token_in_table = table.tokens[self.directions[direction]].values[self.directions[direction] * -1]
         my_token = self.tokens[index]
         return token_in_table == my_token.values[0] or token_in_table == my_token.values[1]
 
-    def play(self, table, index, dir):
+    def play(self, table, index, direction):
         if not table.tokens:
             table.tokens.append(self.tokens.pop(index))
             return True
-        if self.can_play_token(table, index, dir):
-            token_in_table = table.tokens[self.dirs[dir]].values[self.dirs[dir] * -1]
-            my_token = self.tokens[index].values[self.dirs[dir]]
+        if self.can_play_token(table, index, direction):
+            token_in_table = table.tokens[self.directions[direction]].values[self.directions[direction] * -1]
+            my_token = self.tokens[index].values[self.directions[direction]]
             if my_token == token_in_table:
                 self.tokens[index].values[0], self.tokens[index].values[1] = self.tokens[index].values[1], self.tokens[index].values[0]
-                if dir == 'right':
+                if direction == 'right':
                     table.tokens.append(self.tokens.pop(index))
-                elif dir == 'left':
+                elif direction == 'left':
                     table.tokens = [self.tokens.pop(index)] + table.tokens
                 return True
             else:
-                if dir == 'right':
+                if direction == 'right':
                     table.tokens.append(self.tokens.pop(index))
-                elif dir == 'left':
+                elif direction == 'left':
                     table.tokens = [self.tokens.pop(index)] + table.tokens
                 return True
         return False

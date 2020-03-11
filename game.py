@@ -104,5 +104,5 @@ while True:
     if not player1.can_play(table):
         break
     index = int(input('\nCon cuál ficha quiere jugar?\n'))
-    dir = input('En qué dirección quieres jugar?\n')
-    player1.play(table, index, dir)
+    direction = input('En qué dirección quieres jugar?\n')
+    player1.play(table, index, direction)
