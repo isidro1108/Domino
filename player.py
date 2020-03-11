@@ -10,12 +10,14 @@ class Player:
             self.tokens.append(table.tokens.pop())
 
     def can_play(self, table):
-        v1, v2 = table.tokens[0].values[0], table.tokens[-1].values[1]
-        for token in self.tokens:
-            for value in token.values:
-                if value == v1 or value == v2:
-                    return True
-        return False
+        if table.tokens:
+            v1, v2 = table.tokens[0].values[0], table.tokens[-1].values[1]
+            for token in self.tokens:
+                for value in token.values:
+                    if value == v1 or value == v2:
+                        return True
+            return False
+        return True
     
     def can_play_token(self, table, index, dir):
         token_in_table = table.tokens[self.dirs[dir]].values[self.dirs[dir] * -1]
@@ -31,9 +33,15 @@ class Player:
             my_token = self.tokens[index].values[self.dirs[dir]]
             if my_token == token_in_table:
                 self.tokens[index].values[0], self.tokens[index].values[1] = self.tokens[index].values[1], self.tokens[index].values[0]
-                table.tokens.append(self.tokens.pop(index))
+                if dir == 'right':
+                    table.tokens.append(self.tokens.pop(index))
+                elif dir == 'left':
+                    table.tokens = [self.tokens.pop(index)] + table.tokens
                 return True
             else:
-                table.tokens.append(self.tokens.pop(index))
+                if dir == 'right':
+                    table.tokens.append(self.tokens.pop(index))
+                elif dir == 'left':
+                    table.tokens = [self.tokens.pop(index)] + table.tokens
                 return True
         return False

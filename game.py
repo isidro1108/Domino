@@ -77,8 +77,32 @@ class Game:
         print((74 - len(tokens)//2) * ' ' + tokens)
         print('\nTokens aside: ' + tokens_aside)
 
-game = Game()
-game.display_welcome()
-game.set_players()
-game.set_game()
-game.draw_table()
+# game = Game()
+# game.display_welcome()
+# game.set_players()
+# game.set_game()
+# game.draw_table()
+table = Table()
+table.create_tokens()
+table.shuffle_tokens()
+player1 = Player('yo')
+player1.take_tokens(table)
+table.tokens = []
+# for n in range(4):
+#     player1.take_tokens(table)
+
+while True:
+    system('cls')
+    tokens_in_table = ''
+    for token in table.tokens:
+        tokens_in_table+= '[{}|{}]'.format(token.values[0], token.values[1])
+    tokens = ''
+    for token in player1.tokens:
+        tokens+= '[{}|{}] '.format(token.values[0], token.values[1])
+    print('\n' + tokens_in_table + '\n')
+    print(tokens)
+    if not player1.can_play(table):
+        break
+    index = int(input('\nCon cuál ficha quiere jugar?\n'))
+    dir = input('En qué dirección quieres jugar?\n')
+    player1.play(table, index, dir)
