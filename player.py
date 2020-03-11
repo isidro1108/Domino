@@ -1,9 +1,12 @@
+from random import randint
+
 class Player:
     def __init__(self, name):
         self.name = name
         self.points = 0
         self.tokens = []
-        self.directions = {'left': 0, 'right': -1}
+        self.directions = {'l': 0, 'r': -1}
+        self.in_step = ''
 
     def take_tokens(self, table):
         for n in range(7):
@@ -28,9 +31,9 @@ class Player:
         return token_in_table == my_token.values[0] or token_in_table == my_token.values[1]
 
     def put_token(self, table, index, direction):
-        if direction == 'right':
+        if direction == 'r':
             table.tokens.append(self.tokens.pop(index))
-        elif direction == 'left':
+        elif direction == 'l':
             table.tokens = [self.tokens.pop(index)] + table.tokens
 
     def play(self, table, index, direction):
@@ -48,3 +51,27 @@ class Player:
                 self.put_token(table, index, direction)
                 return True
         return False
+
+class CPU(Player):
+    def random_index(self, table):
+        for index in range(len(self.tokens)):
+            if self.can_play_token(table, index, 'l'):
+                return index, 'l'
+            elif self.can_play_token(table, index, 'r'):
+                return index, 'r'
+
+    def play(self, table):
+        if not table.tokens:
+            r_index = randint(0, len(self.tokens))
+            table.tokens.append(self.tokens.pop(r_index))
+            return True
+        index, direction = self.random_index(table)
+        token_in_table = table.tokens[self.directions[direction]].values[self.directions[direction] * -1]
+        my_token = self.tokens[index].values[self.directions[direction]]
+        if my_token == token_in_table:
+            self.tokens[index].values[0], self.tokens[index].values[1] = self.tokens[index].values[1], self.tokens[index].values[0]
+            self.put_token(table, index, direction)
+            return True
+        else:
+            self.put_token(table, index, direction)
+            return True
